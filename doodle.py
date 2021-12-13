@@ -1,12 +1,20 @@
 import tkinter as tk
 
+BLACK = '#000000'
+WHITE = '#ffffff'
+RED = '#f00800'
+BLUE = '#1904ff'
+GREEN = '#1ba306'
+PURPLE = '#8703fa'
+ORANGE = '#ff7403'
+
 
 class Paint:
     def __init__(self):
         self.master = tk.Tk()
+        self.master.title('Not MS Paint')
         self.master.geometry('750x750')
         self.w = tk.Canvas(self.master, width=650, height=750, bg='#ffffff', cursor='circle')
-        self.w.pack(side='left')
         self.menu = tk.Frame(self.master)
         self.colorOptions = tk.Frame(self.menu, pady=25)
         self.colorLabel = tk.Label(self.colorOptions, text='Color')
@@ -48,6 +56,12 @@ class Paint:
         self.none.pack()
         self.shapeOptions.pack()
         self.menu.pack(side='right')
+        self.color = BLACK
+        self.size = 25
+        self.shape = 'none'
+        self.w.bind('<Button-1>', self.click)
+        self.w.bind('<B1-Motion>', self.drag)
+        self.w.pack(side='left')
         self.master.mainloop()
 
     def changeColor(self):
@@ -58,6 +72,17 @@ class Paint:
 
     def changeShape(self):
         pass
+
+    def createCircle(self, x, y, r, fill=None):
+        self.w.create_oval(x-r, y-r, x+r, y+r, fill=fill)
+
+    def click(self, event):
+        if self.shape == 'none':
+            self.createCircle(event.x, event.y, (self.size / 2), self.color)
+
+    def drag(self, event):
+        if self.shape == 'none':
+            self.createCircle(event.x, event.y, (self.size / 2), self.color)
 
 
 paint = Paint()
